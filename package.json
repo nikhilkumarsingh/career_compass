@@ -10,9 +10,13 @@
   "author": "Career-Compass",
   "license": "ISC",
   "dependencies": {
+    "assert": "^1.4.1",
     "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
     "express": "^4.14.0",
     "hbs": "^4.0.1",
+    "md5": "^2.2.1",
+    "mongodb": "^2.2.16",
     "path": "^0.12.7",
     "request": "^2.79.0"
   }

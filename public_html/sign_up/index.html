@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bootstrap Registration Form Template</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="assets/css/form-elements.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="assets/ico/favicon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+
+		<!-- Top menu -->
+		<nav class="navbar navbar-inverse navbar-no-bg" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.html">Bootstrap Registration Form Template</a>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="top-navbar-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+
+							<span class="li-social">
+								<a href="#"><i class="fa fa-facebook"></i></a> 
+								<a href="#"><i class="fa fa-twitter"></i></a> 
+								<a href="#"><i class="fa fa-envelope"></i></a> 
+								<a href="#"><i class="fa fa-skype"></i></a>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+
+		<div class="container">
+
+			<div class="row">
+				<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+
+					<h2>Please Sign Up</h2>
+					<br>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							<div class="form-group">
+								<input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" tabindex="1" required>
+							</div>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<input type="number" name="phone_number" id="phone_number" class="form-control input-lg" placeholder="Phone-Number" tabindex="3" required>
+					</div>
+					<div class="form-group">
+						<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" tabindex="4" required>
+					</div>
+					<div class="form-group">
+						<input type="number" name="age" id="age" class="form-control input-lg" placeholder="Age" tabindex="5" required>
+					</div>
+					<div class="form-group">
+						<textarea class="form-control" rows="5" id="address" id="address" placeholder="Address..."></textarea>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="form-group">
+								<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="6" required>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="form-group">
+								<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password" tabindex="7" required>
+							</div>
+						</div>
+					</div>
+					<br>
+
+					<div class="row" >
+						<div class=" col-sm-12" ><button id="submit" style="box-shadow:5px 5px 5px black" class="btn btn-success btn-block btn-lg">Sign Up</button></div>
+					</div>
+				</div>
+			</div>
+			<br>
+
+		</div>
+        <!-- Javascript -->
+        <script src="assets/js/jquery-1.11.1.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/jquery.backstretch.min.js"></script>
+        <script src="assets/js/retina-1.1.0.min.js"></script>
+        <script src="assets/js/scripts.js"></script>
+        
+        <!--[if lt IE 10]><script src="assets/js/placeholder.js"></script><![endif]-->
+
+		<script>
+
+            localStorage.clear();
+
+            $("#email").focusout(function () {
+
+                if($("#email").val()=="")
+                    return;
+                var email = $("#email").val();
+                var pos = email.indexOf('@');
+                if(pos==-1)
+                {
+                    alert("Email Id must contain @ symbol");
+                    $("#email").val("");
+                }
+                else if(pos == 0 || pos == email.length-1)
+                {
+                    alert("Invalid Format for an Email Address");
+                    $("#email").val("");
+                }
+                else
+                {
+                    pos = email.indexOf('.');
+                    if(pos==-1)
+                    {
+                        alert("Invalid Format for an Email Address");
+                        $("#email").val("");
+                    }
+                }
+
+
+
+            });
+
+            $('#submit').click(function () {
+
+                var obj = {};
+                var flag1=0,flag2=0;
+                obj.name= $('#username').val();
+                obj.pswd = $('#password').val();
+
+                var email = $("#email").val();
+                var pswd2 = $('#password_confirmation').val();
+                var add = $("#address").val();
+                if( obj.name == "" ||  obj.pswd == "" ||  $('#age').val()=="" || $('#username').val() ==""  || $("#email").val()=="" || pswd2=="" || add=="" )
+                {
+                    alert("PLEASE FILL ALL THE ENTRIES");
+                    $("#pswd").val("");
+                    $("#pswd2").val("");
+                    flag1++;
+                }
+
+                if(!flag1 && obj.pswd != pswd2)
+                {
+                    alert("PLEASE FILL BOTH THE PASSWORDS CORRECTLY");
+                    $("#password").val("");
+                    $("#password_confirmation").val("");
+
+                    flag2++;
+                }
+
+
+                if(!flag1 && !flag2)
+                {
+
+                    $('#submit').html("Loading");
+                    var requestdata = {
+
+                        name : $('#username').val(),
+                        pswd : $('#password').val(),
+                        phone : $('#phone_number').val(),
+                        email : $('#email').val(),
+                        age : $('#age').val(),
+						address:$("#address").val()
+                    };
+                    $.post('/newuser',requestdata,function (data,status) {
+
+                        if(data=="no")
+                        {
+                            alert("USERNAME ALREADY EXISTS");
+                            $('#submit').html("Sign Up");
+                        }
+
+                        else {
+                            localStorage.setItem('username',obj.name);
+                            window.location.href = "../logged.html";
+                        }
+                    });
+                }
+
+            });
+
+		</script>
+    </body>
+
+</html>
