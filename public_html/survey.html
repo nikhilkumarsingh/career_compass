@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Career Compass">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Survey</title>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+</head>
+<body>
+    This is an essential survey needed by us to help you make a suitable career choice.
+    Here we go.
+    <br>
+    Rate yourself in the following parameters from 1 - 10
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-sm-12" id="start">
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        $(function () {
+
+            var Content = $('#start');
+            Content.html("Loading...");
+
+            $.post('/fetchSurvey', {}, function (data, status) {
+
+                console.log(status);
+                console.log(data.survey);
+                var Param = data.survey;
+                var str = "";
+                var i , j;
+                console.log(Param);
+                console.log(Param.length);
+                for(i = 0 ; i < 4; ++i )
+                {
+                    console.log(i);
+                    str += ('Part ' + (i+1) + '<br>' );
+                    str += (Param[i].short_descr + '<br>');
+                    for(j = 0 ; j < Param[i].attributes.length; ++j)
+                    {
+                        str += (Param[i].attributes[j].value + '( ' +
+                        Param[i].attributes[j].descr + ' ) <br>' );
+
+                        str += '<input type="number"> <br> '
+
+                    }
+                }
+
+                Content.html(str);
+
+            });
+
+        });
+
+
+    </script>
+
+</body>
+</html>

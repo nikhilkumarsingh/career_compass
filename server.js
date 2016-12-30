@@ -5,7 +5,9 @@ const md5 = require('md5');
 const dbhandler = require('./dbhandler');
 const bodyParser = require('body-parser');
 const cheerio= require('cheerio');
+var PythonShell = require('python-shell');
 var survey = require('./routes/survey');
+var Attributes = require('./survey.json');
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -170,6 +172,31 @@ app.set('port',process.env.PORT || 5000);
 app.listen(app.get('port'),function () {
     console.log("Server Started on port " + app.get('port'));
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/survey', survey);
+
+function RunModel() {
+
+    PythonShell.run('Model.py', function (err) {
+
+        if(err)
+        {
+            throw err;
+        }
+
+        console.log("Finished");
+
+    });
+
+}
+
+app.post('/fetchSurvey', function (req, res) {
+
+    res.send({survey : Attributes});
+
+});
+
 
 
 module.exports = app;
