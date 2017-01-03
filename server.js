@@ -2,12 +2,12 @@
 var express = require('express');
 var path = require('path');
 const md5 = require('md5');
-const dbhandler = require('./dbhandler');
+const dbhandler = require('./helper_scripts/dbhandler');
 const bodyParser = require('body-parser');
 const cheerio= require('cheerio');
 var PythonShell = require('python-shell');
-var survey = require('./routes/survey');
-var Attributes = require('./survey.json');
+var users = require('./routes/users');
+var Attributes = require('./helper_scripts/survey.json');
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -161,7 +161,7 @@ app.post('/updatePassword',function (req, res) {
     })
 });
 
-app.use('/survey', survey);
+app.use('/users', users);
 
 
 
@@ -174,11 +174,12 @@ app.listen(app.get('port'),function () {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/survey', survey);
+
+
 
 function RunModel() {
 
-    PythonShell.run('Model.py', function (err) {
+    PythonShell.run('./helper_scripts/Model.py', function (err) {
 
         if(err)
         {
