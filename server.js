@@ -173,7 +173,7 @@ app.listen(app.get('port'),function () {
     console.log("Server Started on port " + app.get('port'));
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public_html')));
 
 
 
