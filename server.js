@@ -1,204 +1,40 @@
 
-var express = require('express');
-var path = require('path');
-const md5 = require('md5');
-const dbhandler = require('./helper_scripts/dbhandler');
-const bodyParser = require('body-parser');
-const cheerio= require('cheerio');
-var PythonShell = require('python-shell');
-var users = require('./routes/users');
-var Attributes = require('./helper_scripts/survey.json');
-var app = express();
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+var express  = require('express');
+var app      = express();
+var port     = process.env.PORT || 8080;
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
+
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
+
+var configDB = require('./config/database.js');
+mongoose.connect(configDB.url);
+require('./config/passport')(passport);
+
+
+app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, 'public_html')));
-app.post('/login',function (req, res) {
-
-    dbhandler.login({
-        username : req.body.username,
-        password : md5(req.body.password)
-    }, function (value) {
-        if (value == 1)
-        {
-            res.send({val : 1});
-        }
-        else
-        {
-            res.send({val : 0});
-        }
-
-    });
-
-});
-
-app.post('/checkuser',function (req,res) {
-
-    var obj ={
-        username:req.body.name,
-        password:md5(req.body.pswd)
-    };
-
-    dbhandler.check_user(obj,function (result) {
-
-        if(result==1)
-            res.send(1);
-        else
-            res.send(0);
-    });
-});
+app.set('view engine', 'ejs');
 
 
-app.post('/newuser',function (req,res) {
-
-    var obj ={
-        username:req.body.name,
-        password:md5(req.body.pswd),
-        phone : req.body.phone,
-        email : req.body.email,
-        age : req.body.age,
-        address: req.body.address
-    };
-
-    dbhandler.new_user(obj,function (result) {
-
-        if(result==0)
-            res.send("no");
-        else
-            res.send("yes");
-    });
-
-});
-
-app.post('/fetchUser', function (req,res) {
-    dbhandler.fetchUser(req.body.username, function (result) {
-        res.send(result);
-
-    });
-
-});
-
-app.post('/delete', function (req, res) {
-
-    dbhandler.deleteAll();
-    res.send({val : 1});
-
-});
-
-app.post('/updateInfo', function (req, res) {
-
-    if(req.body.l_username!= req.body.username)
-    {
-        dbhandler.check_user({username : req.body.username}, function (result) {
-
-            if(result == 1)
-            {
-                res.send({result : 0});
-                return;
-            }
-            dbhandler.updateInfo({
-
-                l_username : req.body.l_username,
-                username: req.body.username,
-                phone: req.body.phone,
-                email: req.body.email,
-                age: req.body.age,
-                address:req.body.address
-
-            }, function (b) {
-
-                if (b) {
-                    res.send({result: 1});
-                }
-                else {
-                    res.send({result: 2});
-                }
-
-            });
-
-        });
-    }
-    else
-    {
-        dbhandler.updateInfo({
-
-            l_username : req.body.l_username,
-            username: req.body.username,
-            // password:md5(req.body.pswd),
-            phone: req.body.phone,
-            email: req.body.email,
-            age: req.body.age,
-            address:req.body.address
-
-        }, function (b) {
+app.use(session({
+    secret: 'career_compass',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 
-            if (b) {
-                res.send({result: 1});
-            }
-            else {
-                res.send({result: 2});
-            }
+require('./app/routes.js')(app, passport);
 
-        });
-    }
-
-
-});
-
-app.post('/updatePassword',function (req, res) {
-
-    dbhandler.updatePassword({
-        pass1 : md5(req.body.password),
-        pass2 : md5(req.body.n_password),
-        username : req.body.username
-    }, function (bool) {
-        res.send({val : bool});
-
-    })
-});
-
-app.use('/users', users);
-
-
-
-app.use('/', express.static(__dirname + '/public_html'));
-app.set('port',process.env.PORT || 5000);
-
-
-app.listen(app.get('port'),function () {
-    console.log("Server Started on port " + app.get('port'));
-});
-
-app.use(express.static(path.join(__dirname, 'public_html')));
-
-
-
-function RunModel() {
-
-    PythonShell.run('./helper_scripts/Model.py', function (err) {
-
-        if(err)
-        {
-            throw err;
-        }
-
-        console.log("Finished");
-
-    });
-
-}
-
-app.post('/fetchSurvey', function (req, res) {
-
-    res.send({survey : Attributes});
-
-});
-
-
-
-module.exports = app;
-
+app.listen(port);
+console.log('Server started on ' + port);
