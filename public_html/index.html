@@ -1,59 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Career Compass">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home :- Career Compass</title>
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-</head>
-<body>
-<h1 align="center" style="font-family: Serif;font-size: 100px">DUMMY HOME PAGE</h1>
-<br><br>
-<div class="row">
-    <div class="col-sm-3">
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-4 btn-danger"  style="box-shadow: 8px 8px 5px black">
-        <h2  align="center" id="1" style="font-family: Serif">   <a href="sign_up/index.html"> SIGN UP</a></h2>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-3">
-    </div>
-</div>
-<br><br>
-<div class="row">
-    <div class="col-sm-3">
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-4 btn-danger "  style="box-shadow: 8px 8px 5px black">
-        <h2  align="center" id="2" style="font-family: Serif">
-            <a href="login/index.html"> LOGIN</a>
-        </h2>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-3">
-    </div>
-</div>
-<br><br>
-<div class="row">
-    <div class="col-sm-3">
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-4 btn-danger "  style="box-shadow: 8px 8px 5px black">
-        <h2  align="center" id="3" style="font-family: Serif">
-            <a href="survey.html">SURVEY</a>
-        </h2>
-    </div>
-    <div class="col-sm-1"></div>
-    <div class="col-sm-3">
-    </div>
-</div>
-<script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Career Compass">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <title>Home :- Career Compass</title>
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <style>
+            body
+            {
+                padding-top:80px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="jumbotron text-center">
+                <h1>
+                    <span class="fa fa-lock"></span>
+                </h1>
+
+                <p>Login or Register with:</p>
+
+                <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+                <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+                <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+                <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
+                <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
+            </div>
 
 
-</script>
-</body>
+        </div>
+    </body>
 </html>
