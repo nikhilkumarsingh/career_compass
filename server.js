@@ -33,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-
+app.use('/',express.static('public_html'));
 require('./app/routes.js')(app, passport);
 
 app.listen(port);
