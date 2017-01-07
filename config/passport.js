@@ -189,6 +189,7 @@ module.exports = function(passport) {
     },
     function(req, token, tokenSecret, profile, done) {
 
+        console.log(profile);
         process.nextTick(function() {
 
             if (!req.user) {
@@ -261,6 +262,7 @@ module.exports = function(passport) {
 
     },
     function(req, token, refreshToken, profile, done) {
+        console.log(profile);
         process.nextTick(function() {
 
 
