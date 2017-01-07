@@ -12,6 +12,7 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
 var configDB = require('./config/database.js');
+mongoose.Promise = global.Promise;
 mongoose.connect(configDB.url);
 require('./config/passport')(passport);
 

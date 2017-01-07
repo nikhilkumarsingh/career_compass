@@ -3,6 +3,7 @@ var LocalStrategy    = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
+var fs = require('fs');
 
 var User       = require('../app/models/user');
 var configAuth = require('./auth');
@@ -204,6 +205,7 @@ module.exports = function(passport) {
                             user.twitter.token       = token;
                             user.twitter.username    = profile.username;
                             user.twitter.displayName = profile.displayName;
+                            user.twitter.photo = profile._json.profile_image_url;
 
                             user.save(function(err) {
                                 if (err)
@@ -222,7 +224,7 @@ module.exports = function(passport) {
                         newUser.twitter.token       = token;
                         newUser.twitter.username    = profile.username;
                         newUser.twitter.displayName = profile.displayName;
-
+                        newUser.twitter.photo = profile._json.profile_image_url;
                         newUser.save(function(err) {
                             if (err)
                                 return done(err);
@@ -240,6 +242,7 @@ module.exports = function(passport) {
                 user.twitter.token       = token;
                 user.twitter.username    = profile.username;
                 user.twitter.displayName = profile.displayName;
+                user.twitter.photo = profile._json.profile_image_url;
 
                 user.save(function(err) {
                     if (err)
@@ -279,7 +282,7 @@ module.exports = function(passport) {
                             user.google.token = token;
                             user.google.name  = profile.displayName;
                             user.google.email = (profile.emails[0].value || '').toLowerCase();
-
+                            user.google.photo = profile._json.image_url;
                             user.save(function(err) {
                                 if (err)
                                     return done(err);
@@ -296,6 +299,8 @@ module.exports = function(passport) {
                         newUser.google.token = token;
                         newUser.google.name  = profile.displayName;
                         newUser.google.email = (profile.emails[0].value || '').toLowerCase();
+                         newUser.google.photo = profile._json.image.url;
+
 
                         newUser.save(function(err) {
                             if (err)
@@ -314,6 +319,7 @@ module.exports = function(passport) {
                 user.google.token = token;
                 user.google.name  = profile.displayName;
                 user.google.email = (profile.emails[0].value || '').toLowerCase();
+                user.google.photo = profile._json.image.url;
 
                 user.save(function(err) {
                     if (err)
