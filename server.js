@@ -36,5 +36,8 @@ app.use(flash());
 app.use('/',express.static('public_html'));
 require('./app/routes.js')(app, passport);
 
-app.listen(port);
-console.log('Server started on ' + port);
+app.listen(port, function () {
+
+    console.log("Server started on port " + app.get('port'));
+});
+
