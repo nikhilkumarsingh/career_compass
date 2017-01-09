@@ -1,11 +1,11 @@
 
 var LocalStrategy    = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
-var TwitterStrategy  = require('passport-twitter').Strategy;
+
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 var fs = require('fs');
+var User = require('../app/models/user.js');
 
-var User       = require('../app/models/user');
+
 var configAuth = require('./auth');
 module.exports = function(passport) {
 
@@ -30,7 +30,7 @@ module.exports = function(passport) {
         if (email)
             email = email.toLowerCase();
         process.nextTick(function() {
-            User.findOne({ 'local.email' :  email }, function(err, user) {
+            User.findOne({ 'email' :  email }, function(err, user) {
                 if (err)
                     return done(err);
                 if (!user)
@@ -45,8 +45,6 @@ module.exports = function(passport) {
         });
 
     }));
-
-
     passport.use('local-signup', new LocalStrategy({
 
         usernameField : 'email',
@@ -57,8 +55,9 @@ module.exports = function(passport) {
         if (email)
             email = email.toLowerCase();
         process.nextTick(function() {
+            console.log(req.user);
             if (!req.user) {
-                User.findOne({ 'local.email' :  email }, function(err, user) {
+                User.findOne({ 'email' :  email }, function(err, user) {
                     if (err)
                         return done(err);
 
@@ -69,8 +68,8 @@ module.exports = function(passport) {
 
                         var newUser            = new User();
 
-                        newUser.local.email    = email;
-                        newUser.local.password = newUser.generateHash(password);
+                        newUser.email    = email;
+                        newUser.password = newUser.generateHash(password);
 
                         newUser.save(function(err) {
                             if (err)
@@ -81,7 +80,7 @@ module.exports = function(passport) {
                     }
 
                 });
-            } else if ( !req.user.local.email ) {
+            } else if ( !req.user.email ) {
 
                 User.findOne({ 'local.email' :  email }, function(err, user) {
                     if (err)
@@ -92,8 +91,8 @@ module.exports = function(passport) {
 
                     } else {
                         user = req.user;
-                        user.local.email = email;
-                        user.local.password = user.generateHash(password);
+                        user.email = email;
+                        user.password = user.generateHash(password);
                         user.save(function (err) {
                             if (err)
                                 return done(err);
@@ -112,149 +111,6 @@ module.exports = function(passport) {
     }));
 
 
-    var fbStrategy = configAuth.facebookAuth;
-    fbStrategy.passReqToCallback = true;
-    passport.use(new FacebookStrategy(fbStrategy,
-    function(req, token, refreshToken, profile, done) {
-        console.log(profile);
-        process.nextTick(function() {
-            if (!req.user) {
-
-                User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
-                    if (err)
-                        return done(err);
-
-                    if (user) {
-
-
-                        if (!user.facebook.token) {
-                            user.facebook.token = token;
-                            user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                            user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-
-                            user.save(function(err) {
-                                if (err)
-                                    return done(err);
-                                    
-                                return done(null, user);
-                            });
-                        }
-
-                        return done(null, user);
-                    } else {
-
-                        var newUser            = new User();
-
-                        newUser.facebook.id    = profile.id;
-                        newUser.facebook.token = token;
-                        newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                        newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
-
-                        newUser.save(function(err) {
-                            if (err)
-                                return done(err);
-                                
-                            return done(null, newUser);
-                        });
-                    }
-                });
-
-            } else {
-
-                var user            = req.user;
-
-                user.facebook.id    = profile.id;
-                user.facebook.token = token;
-                user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-
-                user.save(function(err) {
-                    if (err)
-                        return done(err);
-                        
-                    return done(null, user);
-                });
-
-            }
-        });
-
-    }));
-
-    passport.use(new TwitterStrategy({
-
-        consumerKey     : configAuth.twitterAuth.consumerKey,
-        consumerSecret  : configAuth.twitterAuth.consumerSecret,
-        callbackURL     : configAuth.twitterAuth.callbackURL,
-        passReqToCallback : true
-
-    },
-    function(req, token, tokenSecret, profile, done) {
-
-        console.log(profile);
-        process.nextTick(function() {
-
-            if (!req.user) {
-
-                User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
-                    if (err)
-                        return done(err);
-
-                    if (user) {
-
-                        if (!user.twitter.token) {
-                            user.twitter.token       = token;
-                            user.twitter.username    = profile.username;
-                            user.twitter.displayName = profile.displayName;
-                            user.twitter.photo = profile._json.profile_image_url;
-
-                            user.save(function(err) {
-                                if (err)
-                                    return done(err);
-                                    
-                                return done(null, user);
-                            });
-                        }
-
-                        return done(null, user);
-                    } else {
-
-                        var newUser                 = new User();
-
-                        newUser.twitter.id          = profile.id;
-                        newUser.twitter.token       = token;
-                        newUser.twitter.username    = profile.username;
-                        newUser.twitter.displayName = profile.displayName;
-                        newUser.twitter.photo = profile._json.profile_image_url;
-                        newUser.save(function(err) {
-                            if (err)
-                                return done(err);
-                                
-                            return done(null, newUser);
-                        });
-                    }
-                });
-
-            } else {
-
-                var user                 = req.user;
-
-                user.twitter.id          = profile.id;
-                user.twitter.token       = token;
-                user.twitter.username    = profile.username;
-                user.twitter.displayName = profile.displayName;
-                user.twitter.photo = profile._json.profile_image_url;
-
-                user.save(function(err) {
-                    if (err)
-                        return done(err);
-                        
-                    return done(null, user);
-                });
-            }
-
-        });
-
-    }));
 
     passport.use(new GoogleStrategy({
 
@@ -280,9 +136,11 @@ module.exports = function(passport) {
 
                         if (!user.google.token) {
                             user.google.token = token;
-                            user.google.name  = profile.displayName;
-                            user.google.email = (profile.emails[0].value || '').toLowerCase();
-                            user.google.photo = profile._json.image_url;
+                            user.google.id = profile.id;
+                            user.first_name  = profile.name.givenName;
+                            user.last_name = profile.name.familyName;
+                            user.email = (profile.emails[0].value || '').toLowerCase();
+                            //user.google.photo = profile._json.image_url;
                             user.save(function(err) {
                                 if (err)
                                     return done(err);
@@ -297,9 +155,10 @@ module.exports = function(passport) {
 
                         newUser.google.id    = profile.id;
                         newUser.google.token = token;
-                        newUser.google.name  = profile.displayName;
-                        newUser.google.email = (profile.emails[0].value || '').toLowerCase();
-                         newUser.google.photo = profile._json.image.url;
+                        newUser.first_name  = profile.name.givenName;
+                        newUser.last_name = profile.name.familyName;
+                        newUser.email = (profile.emails[0].value || '').toLowerCase();
+//                         newUser.google.photo = profile._json.image.url;
 
 
                         newUser.save(function(err) {
@@ -317,9 +176,9 @@ module.exports = function(passport) {
 
                 user.google.id    = profile.id;
                 user.google.token = token;
-                user.google.name  = profile.displayName;
-                user.google.email = (profile.emails[0].value || '').toLowerCase();
-                user.google.photo = profile._json.image.url;
+                user.first_name  = profile.name.givenName;
+                user.last_name = profile.name.familyName;
+                user.email = (profile.emails[0].value || '').toLowerCase();
 
                 user.save(function(err) {
                     if (err)

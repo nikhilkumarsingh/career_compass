@@ -1,15 +1,50 @@
 var express = require('express');
 var Attributes = require('./../helper_scripts/survey.json');
+var User       = require('../app/models/user');
 module.exports = function(app, passport) {
+
+    app.post('/complete', function (req, res) {
+
+        User.findOne({'email' : req.user.email}, function (err, user) {
+
+            user.age = req.body.Age;
+            user.address = req.body.Address;
+            user.first_name = req.body.first_name;
+            user.last_name = req.body.last_name;
+            user.complete = true;
+            user.save(function (err) {
+
+                res.redirect('/profile');
+                res.send({});
+
+
+            });
+
+
+        })
+
+
+    });
+
+
     app.use('/survey', express.static('public_html/survey'));
     app.get('/profile', isLoggedIn, function(req, res) {
         res.render('profile.ejs', {
             user : req.user
         });
     });
+    app.get('/connect/local', function(req, res) {
+        console.log(req.user);
+        res.render('connect-local.ejs', { user : req.user });
+    });
+
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
+    });
+
+    app.get('/signup', function(req, res) {
+        res.render('signup.ejs', { message: req.flash('signupMessage') });
     });
     app.get('/login', function(req, res) {
             res.render('login.ejs', { message: req.flash('loginMessage') });
@@ -17,139 +52,31 @@ module.exports = function(app, passport) {
 
         // process the login form
     app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile',
+            successRedirect : '/connect-local',
             failureRedirect : '/login',
             failureFlash : true
     }));
 
-        app.get('/signup', function(req, res) {
-            res.render('signup.ejs', { message: req.flash('signupMessage') });
-        });
         app.post('/signup', passport.authenticate('local-signup', {
-            successRedirect : '/profile',
+            successRedirect : '/connect/local',
             failureRedirect : '/signup',
             failureFlash : true
         }));
-
-    // facebook -------------------------------
-
-        // send to facebook to do the authentication
-        app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-
-        // handle the callback after facebook has authenticated the user
-        app.get('/auth/facebook/callback',
-            passport.authenticate('facebook', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-    // twitter --------------------------------
-
-        // send to twitter to do the authentication
-        app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
-
-        // handle the callback after twitter has authenticated the user
-        app.get('/auth/twitter/callback',
-            passport.authenticate('twitter', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-
-    // google ---------------------------------
-
-        // send to google to do the authentication
-        app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-
-        // the callback after google has authenticated the user
-        app.get('/auth/google/callback',
-            passport.authenticate('google', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-        app.get('/connect/local', function(req, res) {
-            res.render('connect-local.ejs', { message: req.flash('loginMessage') });
-        });
-        app.post('/connect/local', passport.authenticate('local-signup', {
-            successRedirect : '/profile',
-            failureRedirect : '/connect/local',
-            failureFlash : true
-        }));
-
-    // facebook -------------------------------
-
-        // send to facebook to do the authentication
-        app.get('/connect/facebook', passport.authorize('facebook', { scope : 'email' }));
-
-        // handle the callback after facebook has authorized the user
-        app.get('/connect/facebook/callback',
-            passport.authorize('facebook', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-    // twitter --------------------------------
-
-        // send to twitter to do the authentication
-        app.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
-
-        // handle the callback after twitter has authorized the user
-        app.get('/connect/twitter/callback',
-            passport.authorize('twitter', {
-                successRedirect : '/profile',
-                failureRedirect : '/'
-            }));
-
-
-    // google ---------------------------------
-
-        // send to google to do the authentication
         app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
 
-        // the callback after google has authorized the user
         app.get('/connect/google/callback',
             passport.authorize('google', {
                 successRedirect : '/profile',
                 failureRedirect : '/'
             }));
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
 
-    app.get('/unlink/local', isLoggedIn, function(req, res) {
-        var user            = req.user;
-        user.local.email    = undefined;
-        user.local.password = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
-
-    // facebook -------------------------------
-    app.get('/unlink/facebook', isLoggedIn, function(req, res) {
-        var user            = req.user;
-        user.facebook.token = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
-
-    // twitter --------------------------------
-    app.get('/unlink/twitter', isLoggedIn, function(req, res) {
-        var user           = req.user;
-        user.twitter.token = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
-
-    // google ---------------------------------
-    app.get('/unlink/google', isLoggedIn, function(req, res) {
-        var user          = req.user;
-        user.google.token = undefined;
-        user.save(function(err) {
-            res.redirect('/profile');
-        });
-    });
+    app.get('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }));
 
 
     app.post('/fetchSurvey', function (req, res) {
@@ -161,7 +88,6 @@ module.exports = function(app, passport) {
 
 };
 
-// route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
