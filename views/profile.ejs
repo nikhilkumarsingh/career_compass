@@ -21,14 +21,25 @@
     </style>
 </head>
 <body>
+
 <%
-if(user.complete == false)
-{
-    $.get('/connect/local');
-}
+
+ if(!user.complete)
+ {
+     %>
+
+    <script>
+
+        window.location.href = "/connect/local";
+
+    </script>
+
+<%
+ }
+
+ %>
 
 
-%>
 <div class="container">
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
@@ -40,7 +51,7 @@ if(user.complete == false)
             <div class="well">
                 <h3><span class="fa fa-user"></span>Profile</h3>
 
-                Name : <%=user.first_name + user.last_name%><br>
+                Name : <%=user.first_name + " " + user.last_name%><br>
                 Email : <%=user.email%><br>
                 Age : <%=user.age%><br>
                 Address : <%=user.address%><br>
@@ -52,6 +63,7 @@ if(user.complete == false)
 
 
 
+</div>
 </div>
 </body>
 </html>

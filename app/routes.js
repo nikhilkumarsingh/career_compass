@@ -4,9 +4,17 @@ var User       = require('../app/models/user');
 module.exports = function(app, passport) {
 
     app.post('/complete', function (req, res) {
+        console.log("Complete 1");
 
         User.findOne({'email' : req.user.email}, function (err, user) {
 
+            if(err)
+            {
+                console.log(err);
+                throw err;
+            }
+
+            console.log("Complete 2");
             user.age = req.body.Age;
             user.address = req.body.Address;
             user.first_name = req.body.first_name;
@@ -14,7 +22,13 @@ module.exports = function(app, passport) {
             user.complete = true;
             user.save(function (err) {
 
-                res.redirect('/profile');
+                if(err)
+                {
+                    console.log(err);
+                    throw err;
+                }
+
+
                 res.send({});
 
 
@@ -52,7 +66,7 @@ module.exports = function(app, passport) {
 
         // process the login form
     app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/connect-local',
+            successRedirect : '/connect/local',
             failureRedirect : '/login',
             failureFlash : true
     }));
