@@ -18,6 +18,10 @@
         {
             padding-top:80px;
         }
+        .row{
+
+            transform:translateX(25%);
+        }
     </style>
 </head>
 <body>
@@ -43,7 +47,7 @@
 <div class="container">
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/logout" class="btn btn-default btn-sm" style="right:0">Logout</a>
     </div>
 
     <div class="row">
@@ -55,14 +59,8 @@
                 Email : <%=user.email%><br>
                 Age : <%=user.age%><br>
                 Address : <%=user.address%><br>
-
-
-
             </div>
         </div>
-
-
-
 </div>
 </div>
 </body>
