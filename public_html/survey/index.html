@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Career Compass">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Survey</title>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+</head>
+<body>
+This is an essential survey needed by us to help you make a suitable career choice.
+Here we go.
+<br>
+Rate yourself in the following parameters from 1 - 10
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12" id="start">
+
+
+
+        </div>
+
+
+    </div>
+    <input id="btnSave1"  type="button" value="1" />
+    <input id="btnSave2"  type="button" value="2" />
+    <input id="btnSave3"  type="button" value="3" />
+    <input id="btnSave4"  type="button" value="4" />
+</div>
+
+
+<script>
+    $(function () {
+        var Param;
+        var Content = $('#start');
+        Content.html("Loading...");
+        $.post('/fetchSurvey', {}, function (data, status) {
+            console.log(status);
+            console.log(data.survey);
+            Param = data.survey;
+            var str = "";
+            var i , j;
+            console.log(Param);
+            console.log(Param.length);
+            for(i = 0 ; i < 4; ++i )
+            {
+                console.log(i);
+                str += ('Part ' + (i+1) + '<br>' );
+                str += (Param[i].short_descr + '<br>');
+                for(j = 0 ; j < Param[i].attributes.length; ++j)
+                {
+                    str += (Param[i].attributes[j].value + '( ' +
+                    Param[i].attributes[j].descr + ' ) <br>' );
+                    str += ' <select required=required id="'+Param[i].attributes[j].value+'">';
+                    str+='<option selected disabled>Choose here</option>';
+                    for(var k=1;k<=10;k++){
+                        str+='<option value="'+k+'">'+k+'</option>';}
+                    str+='</select> <br>';
+                }
+                //str+='<input id="btnSave'+(i+1)+'" purpose ="'+(i+1)+'" type="button" value="Save" /> <br />';
+                str+='<br><br>';
+            }
+            Content.html(str);
+        });
+        //HandlingSaveButton
+        var $btnSave1,$btnSave2,$btnSave3,$btnSave4;
+        //Handling saveButtons
+        function handleSaveClick(){
+            window.event.preventDefault();
+            var user={};
+            var curr_focus=Param[parseInt(window.event.srcElement.id.charAt(7))-1].attributes;
+            for(var i=0;i<curr_focus.length;i++){
+                var e = document.getElementById(curr_focus[i].value);
+                user[curr_focus[i].value]=e.options[e.selectedIndex].value;
+            }
+            console.log(user);
+            AddtoLocalStorage(user);
+        }
+        function AddtoLocalStorage(user){
+            localStorage.setItem(parseInt(window.event.srcElement.id.charAt(7)) + "" , JSON.stringify(user))
+        }
+        function init(){
+            $btnSave1=$('#btnSave1');
+            $btnSave2=$('#btnSave2');
+            $btnSave3=$('#btnSave3');
+            $btnSave4=$('#btnSave4');
+            $btnSave1.on('click',handleSaveClick);
+            $btnSave2.on('click',handleSaveClick);
+            $btnSave3.on('click',handleSaveClick);
+            $btnSave4.on('click',handleSaveClick);
+        }
+        init();
+    });
+</script>
+
+</body>
+</html>

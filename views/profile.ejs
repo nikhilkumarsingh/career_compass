@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Career Compass">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Profile</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.js"
+            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+            crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style>
+        body
+        {
+            padding-top:80px;
+        }
+    </style>
+</head>
+<body>
+
+<%
+
+ if(!user.complete)
+ {
+     %>
+
+    <script>
+
+        window.location.href = "/connect/local";
+
+    </script>
+
+<%
+ }
+
+ %>
+
+
+<div class="container">
+    <div class="page-header text-center">
+        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="well">
+                <h3><span class="fa fa-user"></span>Profile</h3>
+
+                Name : <%=user.first_name + " " + user.last_name%><br>
+                Email : <%=user.email%><br>
+                Age : <%=user.age%><br>
+                Address : <%=user.address%><br>
+
+
+
+            </div>
+        </div>
+
+
+
+</div>
+</div>
+</body>
+</html>
