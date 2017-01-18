@@ -9,21 +9,102 @@
         <script src="js/jquery.js"></script>
         <script src="js/bootstrap.js"></script>
         <style>
-            body
-            {
-                padding-top:80px;
+            html , body{
+                padding:0;
+                margin:0;
+                width:100%;
+                font-family: Open Sans, Arial, sans-serif;
+
+                background-color: rgb(250,250,250);
+                overflow-x: hidden;
             }
+            #header{
+                background-color: rgb(255,255,255);
+                color:black;
+                position:fixed;
+
+                top:0;
+                left:0;
+
+
+                z-index:1;
+                height:5.7em;
+                width:100%;
+                box-shadow: 0 0 5px #000000;
+
+                transition: width 0.4s ease, left 0.4s ease;
+
+                /*box-sizing: border-box;*/
+                /*backface-visibility: hidden;*/
+                /*background-origin: padding-box;*/
+            }
+            #header #header-left{
+                position:relative;
+                height:100%;
+                width:10%;
+                color: grey;
+                float:left;
+            }
+            #header #header-right{
+                position:relative;
+                height:100%;
+                width:calc(90%);
+                float:left;
+                text-align: center;
+                color: #ffee00;
+            }
+            #content {
+                position:relative;
+                background-color: rgb(250, 250, 250);
+                margin: 6.4em auto 0px auto;
+                width: 90%;
+                height:90%;
+
+                transition: width 0.4s ease, left 0.2s ease;
+            }
+            #footer{
+                position:relative;
+                background-color: rgb(34, 34, 34);
+                margin:0;
+                width:100%;
+                height:10%;
+                bottom:0;
+            }
+
         </style>
     </head>
     <body>
+    <div id="header">
+        <div id="header-left">
 
-    Career Compass
+        </div>
+        <div id="header-right">
+            <h1>Career Compass</h1>
+        </div>
 
-    <a href="/login">login</a>
+    </div>
+    <div class="content" id="container">
+        <div id="content">
+
+
+            <br>
+
+    <a href="/login">Login</a>
     <br>
     <a href="/survey">Survey</a>
     <br>
-    <a href="/signup">Sign up</a>
+    <a href="/signup">Sign Up</a>
     <br>
+
+           </div>
+        </div>
+    <div id="footer">
+        <div class="top-footer">
+
+        </div>
+        <div class="reference">
+            <img src="" />
+        </div>
+    </div>
     </body>
 </html>
