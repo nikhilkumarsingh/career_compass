@@ -14,13 +14,63 @@
             crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <style>
-        body
-        {
-            padding-top:80px;
+        html , body{
+            padding:0;
+            margin:0;
+            width:100%;
+            font-family: Open Sans, Arial, sans-serif;
+
+            background-color: rgb(250,250,250);
+            overflow-x: hidden;
+        }
+        #header{
+            background-color: rgb(255,255,255);
+            color:black;
+            position:fixed;
+
+            top:0;
+            left:0;
+
+
+            z-index:1;
+            height:5.7em;
+            width:100%;
+            box-shadow: 0 0 5px #000000;
+
+            transition: width 0.4s ease, left 0.4s ease;
+
+            /*box-sizing: border-box;*/
+            /*backface-visibility: hidden;*/
+            /*background-origin: padding-box;*/
+        }
+        #header #header-left{
+            position:relative;
+            height:100%;
+            width:10%;
+            color: grey;
+            float:left;
+        }
+        #header #header-right{
+            position:relative;
+            height:100%;
+            width:calc(90%);
+            float:left;
+            text-align: center;
+            color: #ffee00;
         }
     </style>
 </head>
 <body>
+<div id="header">
+    <div id="header-left">
+
+    </div>
+    <div id="header-right">
+        <h1>Career Compass</h1>
+    </div>
+
+</div>
+<br/><br/><br/><br/><br/>
 <div class="container">
 <div class="col-sm-6 col-sm-offset-3">
 
@@ -40,8 +90,7 @@
             <label>Password</label>
             <input type="password" class="form-control" name="password">
         </div>
-
-        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+        <button type="submit" class="btn btn-warning btn-lg" style="margin-left: 38%">Login</button>
     </form>
 
     <hr>
@@ -49,7 +98,7 @@
 
 
 
-    <div class="container">
+    <div class="container1">
 
         <div class="jumbotron text-center">
             <h1>
